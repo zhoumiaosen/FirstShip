@@ -4368,3 +4368,41 @@ ul {
     font-size: 12px;
   }
 }
+
+.online-demo-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: #eaf1e2;
+  border-bottom: 1px solid #d7e2cc;
+  color: #365b40;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.online-demo-note svg {
+  flex-shrink: 0;
+}
+.online-demo-note a {
+  white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .online-demo-note {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 12px 20px;
+    gap: 7px;
+    font-size: 11px;
+  }
+  .online-demo-note span {
+    flex: 1;
+    min-width: 220px;
+  }
+  .online-demo-note a {
+    margin-left: 24px;
+  }
+}

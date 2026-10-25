@@ -9,7 +9,9 @@
     "start": "node server/index.js",
     "test": "node --test src/lib/*.test.js server/*.test.js",
     "test:e2e": "playwright test",
-    "screenshots": "node scripts/capture-screenshots.mjs"
+    "screenshots": "node scripts/capture-screenshots.mjs",
+    "build:demo": "vite build --mode online-demo --base=./ --outDir docs/app --emptyOutDir",
+    "test:demo": "playwright test --config playwright.demo.config.js"
   },
   "dependencies": {
     "react": "^19.2.0",

@@ -42,6 +42,11 @@ import {
   safeUrl,
 } from "./lib/domain.js";
 import { loadProject, saveProject, STORAGE_KEY } from "./lib/storage.js";
+import {
+  requestCoaching as coach,
+  getCoachHealth,
+  ONLINE_DEMO,
+} from "./lib/coach-client.js";
 
 const emptyProfile = {
   idea: "",
@@ -164,21 +169,6 @@ function Modal({ title, children, onClose, wide = false }) {
     </div>
   );
 }
-async function coach(body) {
-  const response = await fetch("/api/coach", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(45000),
-  });
-  const data = await response.json();
-  if (!response.ok)
-    throw new Error(
-      data.error ||
-        "Your coach couldn’t respond. Your work is safe; please try again.",
-    );
-  return data;
-}
 
 export default function App() {
   const [initial] = useState(() => loadProject());
@@ -206,8 +196,7 @@ export default function App() {
   );
   const [confirmRecovery, setConfirmRecovery] = useState(false);
   useEffect(() => {
-    fetch("/api/health")
-      .then((r) => r.json())
+    getCoachHealth()
       .then((d) => setAiAvailable(!!d.aiAvailable))
       .catch(() => {});
   }, []);
@@ -429,6 +418,17 @@ export default function App() {
           </div>
         </div>
       </header>
+      {ONLINE_DEMO && (
+        <div className="online-demo-note">
+          <Sprout size={17} />
+          <span>
+            <strong>Online demo · Starter guidance.</strong> Your project stays
+            in this browser. Build in Codex, then return here to check your
+            progress.
+          </span>
+          <a href="../">About FirstShip ↗</a>
+        </div>
+      )}
       {warning && (
         <div className="storage-warning" role="alert">
           {warning}
@@ -1676,7 +1676,9 @@ function ModeDisclosure({ aiAvailable }) {
       <p>
         {aiAvailable
           ? "AI coaching is available. Only what you submit for planning or help is sent to the AI provider."
-          : "Starter guidance is active. Live AI coaching needs a server connection configured by the app owner."}
+          : ONLINE_DEMO
+            ? "Starter guidance runs in your browser. Your plan and troubleshooting notes stay on this device."
+            : "Starter guidance is active. Live AI coaching needs a server connection configured by the app owner."}
       </p>
     </div>
   );

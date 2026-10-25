@@ -20,3 +20,10 @@ Node tests: scoping variety, completion gates, malformed storage, summary links,
 
 ## Public Repository
 https://github.com/zhoumiaosen/FirstShip — public, main branch. GitHub Actions runs core tests, production build and browser checks on push.
+
+## Public Browser Demo
+The user requested direct online access from the introduction website. `npm run build:demo` builds the same React app in Vite `online-demo` mode to `docs/app/` with relative asset URLs. GitHub Pages serves it at https://zhoumiaosen.github.io/FirstShip/app/.
+
+In this mode, `src/lib/coach-client.js` uses shared pure starter guidance in `src/lib/guidance.js`. Planning and help stay in the browser; no `/api` or AI provider requests are made. The online demo is labeled starter guidance, with local storage, all ten tasks, checks, help, and summary export. The Node build retains server-backed optional live AI and its existing validation. Public live AI hosting is not configured.
+
+Verification adds three client tests and a browser journey starting at the introduction CTA, covering scoping, help, ten tasks, refresh, download, mobile layout and no backend requests. CI builds and tests both variants.

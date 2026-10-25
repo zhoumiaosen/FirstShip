@@ -4,7 +4,9 @@
 
 FirstShip coaches beginners as they build their own small browser app with Codex in a separate tool. It turns an ambitious idea into an editable, achievable scope, then provides five days of project-specific tasks, copyable prompts, learner checks, and contextual troubleshooting.
 
-[Explore the introduction website](https://zhoumiaosen.github.io/FirstShip/) · [Quick start](#run-locally) · [Screenshots](#screenshots)
+[**Try FirstShip online**](https://zhoumiaosen.github.io/FirstShip/app/) · [Introduction website](https://zhoumiaosen.github.io/FirstShip/) · [Run locally](#run-locally) · [Screenshots](#screenshots)
+
+The public app includes the complete learner journey with **Starter guidance**: idea scoping, ten tasks, contextual troubleshooting, learner-confirmed checks, saved progress, and summary exports. No installation, account, or AI API key is needed. Building your own app still happens in a separate coding tool such as Codex; access to that tool is separate. Live AI is optional in the local server version and is not active in the public app.
 
 ![FirstShip dashboard showing a personalized five-day learning journey for the sample LeafLog project](docs/screenshots/dashboard.png)
 
@@ -73,7 +75,7 @@ npm run build
 npm start
 ```
 
-The server binds to loopback and accepts localhost hosts only. This is a local hackathon demo, not a public hosted service. Public hosting requires an authenticated access boundary and deployment configuration before enabling a paid API key.
+The Node server binds to loopback and accepts localhost hosts only. The public GitHub Pages app is a separate, browser-only build using starter guidance; it does not expose this server or a paid API key. Hosting the Node server publicly with live AI would require an authenticated access boundary and deployment configuration.
 
 ## Optional live AI
 
@@ -98,7 +100,7 @@ Milestones are learner-confirmed. FirstShip does not inspect your local code, ru
 
 One project is saved in this browser's local storage, including idea, plan, reflections, and lesson progress. It is not synced between devices. Export a summary before clearing browser data. Storage failures are shown rather than reported as saved.
 
-Scoping and help submissions go to the local server. When live AI is enabled, those submitted fields are sent to OpenAI. Remove passwords, API keys, personal data, and private code before submitting. Starter guidance does not call an external AI provider. Do not use sensitive or regulated information in this prototype.
+In the public app, starter scoping and troubleshooting run in the browser without sending your answers to an AI provider. In the local server version, scoping and help submissions go to the local server; when live AI is enabled, those submitted fields are sent to OpenAI. Remove passwords, API keys, personal data, and private code before submitting to an AI service or coding tool. Do not use sensitive or regulated information in this prototype.
 
 ## Verification
 
@@ -107,13 +109,23 @@ npm test
 npm run build
 npx playwright install chromium
 npm run test:e2e
+npm run build:demo
+npm run test:demo
 ```
 
-Node tests cover scope variety, completion gates, persistence, URL handling, AI response validation, failures, request limits, and server boundaries. Browser tests cover the learner journey and small-screen navigation. GitHub Actions runs the same checks.
+Node tests cover scope variety, completion gates, persistence, URL handling, AI response validation, failures, request limits, and server boundaries. Browser tests cover the learner journey and small-screen navigation. The public-demo test opens the introduction link, completes all ten tasks, uses help, reloads, exports, and verifies that no backend requests are made. GitHub Actions runs both versions.
 
-## Introduction website and screenshots
+## Online app, introduction website, and screenshots
 
-The introduction site lives in `docs/index.html` with its own stylesheet. It is a standalone static website: no build step, account, API key, or JavaScript is needed to view it. GitHub Pages publishes the repository's `main` branch from `/docs`.
+The introduction site lives in `docs/index.html` with its own stylesheet. It is a standalone static website: no build step, account, API key, or JavaScript is needed to view it. Its **Try FirstShip** links open the working browser app at `docs/app/`. GitHub Pages publishes the repository's `main` branch from `/docs`.
+
+Rebuild the public app after application changes:
+
+```sh
+npm run build:demo
+```
+
+This creates the browser-only app in `docs/app/`, using local starter guidance and browser-local progress. It includes no server or live AI credentials. Commit the generated files when publishing an update.
 
 Preview the website locally:
 
@@ -121,7 +133,7 @@ Preview the website locally:
 python3 -m http.server 4173 --directory docs
 ```
 
-Then open http://localhost:4173. The introduction page explains the app; follow the quick start above to run the working coach locally.
+Then open http://localhost:4173 for the introduction page, or http://localhost:4173/app/ to try the browser app. Rebuild with `npm run build:demo` first if `docs/app/` is missing or out of date. The optional local server setup above enables live AI with your own key.
 
 To refresh the screenshots, start FirstShip in one terminal, then run this in another:
 
@@ -137,11 +149,14 @@ The capture script opens an isolated sample project and uses the actual starter-
 - `src/styles.css`: responsive visual system.
 - `src/lib/domain.js`: personalized curriculum, scope, completion, and export.
 - `src/lib/storage.js`: browser-local persistence and recovery.
+- `src/lib/guidance.js`: shared starter guidance used without a live AI provider.
+- `src/lib/coach-client.js`: coaching access for the online demo and local server modes.
 - `server/coach.js`: input validation, starter guidance, optional live AI.
 - `server/index.js`: local HTTP server and API boundaries.
 - `devpost/`: scope, product requirements, technical specification, build checklist.
 - `docs/index.html`, `docs/site.css`: static introduction website.
 - `docs/screenshots/`: real sample-project screenshots used by the website and README.
+- `docs/app/`: generated, browser-only public app (`npm run build:demo`).
 - `scripts/capture-screenshots.mjs`: reproducible, isolated screenshot capture.
 
 ## Hackathon workflow and attribution
