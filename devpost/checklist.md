@@ -5,7 +5,7 @@ mode: fast
 # Build checklist
 User approved the detailed design and requested complete implementation. Routine technical defaults and build order proceed under that authorization, overriding repeated approval prompts in skill guidance.
 ## Slices
-- [ ] **1. An idea becomes a saved achievable plan**
+- [x] **1. An idea becomes a saved achievable plan**
   Becomes usable: onboarding, scope edit and journey.
   Why now: proves personalized scoping kernel early.
   PRD ref: Onboarding and Scope
@@ -14,7 +14,7 @@ User approved the detailed design and requested complete implementation. Routine
   Verify (mechanical): domain tests, build, browser onboarding/reload.
   Learner check: enter an idea, edit scope, refresh and see it retained.
   Commit: feat: add personalized project journey
-- [ ] **2. Learn, get unstuck, and finish**
+- [x] **2. Learn, get unstuck, and finish**
   Becomes usable: task/check/reflection loop, help, final export.
   Why now: completes the core learner experience.
   PRD ref: Journey and Lessons; Recovery; Persistence and Finish
@@ -26,9 +26,18 @@ User approved the detailed design and requested complete implementation. Routine
 ## Hands-on Checkpoints
 - [ ] User tries the completed local preview; do not claim this happened before feedback.
 ## Final Review
-- [ ] Agent verification and independent review.
+- [x] Independent review completed; saved-help draft issue reproduced and fixed. Final automated check results recorded below.
 - [ ] User confirms ready after trying it.
 ## Code Tour and App Map
-- [ ] Provide concise source map and reusable verification takeaway.
+- [x] Source map and reusable verification takeaway provided in devpost/app-map.html and README.md. Hands-on learner review remains pending.
 ## Revisions
 - Technical defaults selected by builder, not attributed to user. No extra approval gates because user explicitly requested implementation.
+
+## Verification record
+- 2026-10-25: 24 Node checks pass, including development-module loading and API boundaries.
+- Production build passes.
+- Browser regression for partial saved help notes reproduced before fix and passes after merging saved values with empty defaults.
+- All 5 browser tests pass (28.5 seconds), including all ten tasks, export, reload, help recovery, guided fallback, mobile navigation, and restored partial help drafts.
+- Live provider call not performed: no server API key configured.
+- Desktop welcome/dashboard and mobile lesson screenshots inspected.
+- User hands-on review and hackathon video/submission remain pending.
