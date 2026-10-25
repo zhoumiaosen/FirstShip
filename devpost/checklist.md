@@ -18,8 +18,8 @@ User approved the detailed design and requested complete implementation. Routine
   Becomes usable: task/check/reflection loop, help, final export.
   Why now: completes the core learner experience.
   PRD ref: Journey and Lessons; Recovery; Persistence and Finish
-  Spec ref: API Contract; Failure Modes
-  Build: five-day curriculum, optional AI, explicit offline guidance, completion gates.
+  Spec ref: Course Guidance; Failure Modes
+  Build: five-day course, browser-local troubleshooting checklists, completion gates.
   Verify (mechanical): Node tests, browser journey and production build.
   Learner check: copy a task, try help, confirm checks and export.
   Commit: feat: complete coaching and first-app handoff
@@ -38,6 +38,11 @@ User approved the detailed design and requested complete implementation. Routine
 - Production build passes.
 - Browser regression for partial saved help notes reproduced before fix and passes after merging saved values with empty defaults.
 - All 5 browser tests pass (28.5 seconds), including all ten tasks, export, reload, help recovery, guided fallback, mobile navigation, and restored partial help drafts.
-- Live provider call not performed: no server API key configured.
+- Optional integration was removed at the user’s request. All course guidance now runs in the browser.
 - Desktop welcome/dashboard and mobile lesson screenshots inspected.
 - User hands-on review and hackathon video/submission remain pending.
+
+## Course-only update
+- 20 Node checks pass, including preservation of earlier saved progress and removal of coaching endpoints.
+- Five local browser tests and the complete published-course journey pass.
+- Required scope.md, prd.md, and spec.md remain in the public devpost folder and reflect the complete guided course.

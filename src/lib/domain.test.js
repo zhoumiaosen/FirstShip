@@ -279,3 +279,23 @@ test("summary keeps final reflections and chosen features, without unsafe links"
   assert.ok(summary.includes(p.scope.features[0]));
   assert.ok(summary.includes("Test empty inputs earlier."));
 });
+
+test("saved projects from earlier versions keep progress while dropping the old delivery mode", () => {
+  const storage = memory();
+  let project = make();
+  const task = getDays(project)[0].tasks[0];
+  project = completeTask(
+    project,
+    task.id,
+    task.checks.map(() => true),
+    "I checked the original task.",
+  );
+  storage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({ version: 1, project: { ...project, mode: "ai" } }),
+  );
+  const restored = loadProject(storage);
+  assert.equal(restored.warning, "");
+  assert.deepEqual(restored.project, project);
+  assert.equal(getProgress(restored.project).completed, 1);
+});

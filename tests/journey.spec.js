@@ -90,7 +90,7 @@ test("own idea → editable scope → ten learner-confirmed tasks → export; su
   expect(errors).toEqual([]);
 });
 
-test("help retains details across failure, close/reopen and reload, then provides guided next step", async ({
+test("help retains details across close/reopen and reload, then provides a course checklist", async ({
   page,
 }) => {
   await createPlan(page);
@@ -107,22 +107,6 @@ test("help retains details across failure, close/reopen and reload, then provide
   await page
     .getByLabel("Exact error message (if there is one)")
     .fill("ERR_CONNECTION_REFUSED");
-  await page.route("**/api/coach", (route) =>
-    route.fulfill({
-      status: 502,
-      contentType: "application/json",
-      body: JSON.stringify({
-        error: "The AI coach could not respond. Please retry.",
-      }),
-    }),
-  );
-  await page
-    .getByRole("button", { name: "Help me find the next step" })
-    .click();
-  await expect(page.getByRole("alert")).toContainText("Please retry");
-  await expect(page.getByLabel("What happened instead?")).toHaveValue(
-    "Connection refused",
-  );
   await page.getByRole("button", { name: "Close dialog" }).click();
   await page.reload();
   await page
@@ -140,31 +124,21 @@ test("help retains details across failure, close/reopen and reload, then provide
   await expect(page.getByLabel("What happened instead?")).toHaveValue(
     "Connection refused",
   );
-  await page.unroute("**/api/coach");
   await page
     .getByRole("button", { name: "Help me find the next step" })
     .click();
   await expect(
     page.getByRole("heading", { name: "Here’s a place to start." }),
   ).toBeVisible();
-  await expect(page.locator(".help-result")).toContainText("Starter guidance");
+  await expect(page.locator(".help-result")).toContainText("Guided course");
   await expect(page.locator(".help-result .prompt-box")).toContainText(
     "ERR_CONNECTION_REFUSED",
   );
 });
 
-test("scope service failure keeps idea and offers explicit starter guidance", async ({
+test("the course narrows ambitious ideas and validates edited plans", async ({
   page,
 }) => {
-  await page.route("**/api/coach", (route) =>
-    route.fulfill({
-      status: 504,
-      contentType: "application/json",
-      body: JSON.stringify({
-        error: "The AI coach took too long. Please retry.",
-      }),
-    }),
-  );
   await page.goto("/");
   await page
     .getByRole("button", { name: "Start building", exact: true })
@@ -179,15 +153,18 @@ test("scope service failure keeps idea and offers explicit starter guidance", as
   }
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("button", { name: "Make my five-day plan" }).click();
-  await expect(page.getByRole("alert")).toContainText("Please retry");
-  await page
-    .getByRole("button", { name: "Use starter guidance instead" })
-    .click();
   await expect(
     page.getByLabel("The one main thing it should do"),
   ).not.toHaveValue("Book rooms with payments and chat");
+  await page.getByLabel("Project name", { exact: true }).fill(" ");
+  await page.getByRole("button", { name: "This is my starting point" }).click();
+  await expect(page.getByRole("alert")).toContainText("Add a project name");
+  await page
+    .getByLabel("Project name", { exact: true })
+    .fill("Student Room Finder");
+  await page.getByRole("button", { name: "This is my starting point" }).click();
   await expect(
-    page.getByText("Starter guidance", { exact: true }),
+    page.getByRole("heading", { name: "Your five-day journey" }),
   ).toBeVisible();
 });
 

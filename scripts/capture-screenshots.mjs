@@ -1,10 +1,9 @@
 import { chromium } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
-import { coach } from "../server/coach.js";
 
 // Sample data in an isolated browser; existing learner projects are untouched.
-// Use real starter-guidance code without sending requests to a paid AI provider.
+// Capture the real course in a fresh browser context.
 const baseURL = process.env.SCREENSHOT_BASE_URL || "http://localhost:5173";
 const directory = resolve("docs/screenshots");
 await mkdir(directory, { recursive: true });
@@ -16,13 +15,6 @@ try {
     reducedMotion: "reduce",
   });
   const page = await context.newPage();
-  await page.route("**/api/health", (route) =>
-    route.fulfill({ json: { ok: true, aiAvailable: false } }),
-  );
-  await page.route("**/api/coach", async (route) => {
-    const result = await coach(route.request().postDataJSON(), { apiKey: "" });
-    await route.fulfill({ json: result });
-  });
   async function capture(name, ready) {
     await ready.waitFor({ state: "visible" });
     await page.evaluate(async () => {

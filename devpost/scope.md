@@ -9,7 +9,7 @@ Describe idea → review/edit reduced scope → approve → copy a tailored task
 ## What Working Looks Like
 A learner can plan their own idea, complete an exercise with checks, receive stuck guidance, resume after refresh, and download their final summary.
 ## The POC Boundary
-One project, one browser, five available days, one coding tool. Live AI when server credentials are configured; explicit guided fallback otherwise.
+One project, one browser, five available days, one external coding tool. Complete structured course, project-specific prompts, checklists, troubleshooting and exports run in the browser. No AI integration inside FirstShip.
 ## Explicitly Cut
 Accounts, payment, direct Codex/repository control, automatic grading, certificates, social features. Hosting optional; public GitHub repository required.
 ## Approval evidence

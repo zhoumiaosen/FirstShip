@@ -42,11 +42,7 @@ import {
   safeUrl,
 } from "./lib/domain.js";
 import { loadProject, saveProject, STORAGE_KEY } from "./lib/storage.js";
-import {
-  requestCoaching as coach,
-  getCoachHealth,
-  ONLINE_DEMO,
-} from "./lib/coach-client.js";
+import { createTroubleshootingGuidance } from "./lib/guidance.js";
 
 const emptyProfile = {
   idea: "",
@@ -180,11 +176,9 @@ export default function App() {
   );
   const [step, setStep] = useState(0);
   const [draftScope, setDraftScope] = useState(null);
-  const [scopeMode, setScopeMode] = useState("guided");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [aiAvailable, setAiAvailable] = useState(false);
   const [helpTask, setHelpTask] = useState(null);
   const [resources, setResources] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
@@ -195,11 +189,6 @@ export default function App() {
     !initial.project && !!initial.warning?.includes("restore"),
   );
   const [confirmRecovery, setConfirmRecovery] = useState(false);
-  useEffect(() => {
-    getCoachHealth()
-      .then((d) => setAiAvailable(!!d.aiAvailable))
-      .catch(() => {});
-  }, []);
   useEffect(() => {
     if (!notice) return;
     const id = setTimeout(() => setNotice(""), 4500);
@@ -242,24 +231,13 @@ export default function App() {
     setBusy(true);
     setError("");
     try {
-      const data = await coach({ action: "scope", profile });
-      setDraftScope(data.result);
-      setScopeMode(data.mode);
+      setDraftScope(createGuidedScope(profile));
       navigate("scope");
     } catch (err) {
-      setError(
-        err.name === "TimeoutError"
-          ? "The coach took too long. Try again or use starter guidance below."
-          : err.message,
-      );
+      setError(err.message);
     } finally {
       setBusy(false);
     }
-  }
-  function starterScope() {
-    setDraftScope(createGuidedScope(profile));
-    setScopeMode("guided");
-    navigate("scope");
   }
   function approveScope(forceReplace = false) {
     const fields = ["title", "description", "audience", "coreTask"];
@@ -313,8 +291,7 @@ export default function App() {
         helpDraft: {},
         activeDay: 1,
       });
-    else
-      persist({ ...createProject(profile, clean, scopeMode), approved: true });
+    else persist({ ...createProject(profile, clean), approved: true });
     setRecoveryProtected(false);
     setConfirmRecovery(false);
     setScopeEditing(false);
@@ -337,7 +314,6 @@ export default function App() {
   }
   function editScope() {
     setDraftScope({ ...project.scope });
-    setScopeMode(project.mode || "guided");
     setScopeEditing(true);
     navigate("scope");
   }
@@ -418,17 +394,6 @@ export default function App() {
           </div>
         </div>
       </header>
-      {ONLINE_DEMO && (
-        <div className="online-demo-note">
-          <Sprout size={17} />
-          <span>
-            <strong>Online demo · Starter guidance.</strong> Your project stays
-            in this browser. Build in Codex, then return here to check your
-            progress.
-          </span>
-          <a href="../">About FirstShip ↗</a>
-        </div>
-      )}
       {warning && (
         <div className="storage-warning" role="alert">
           {warning}
@@ -462,8 +427,9 @@ export default function App() {
                 <span>your first app.</span>
               </h1>
               <p>
-                You don’t need to know how to code. Bring your idea, and we’ll
-                help you build it with AI—one small, confident step at a time.
+                You don’t need to know how to code. Follow a five-day course to
+                plan, build, test, and share your own app with an AI coding
+                tool.
               </p>
               <div className="hero-actions">
                 <Button
@@ -509,10 +475,10 @@ export default function App() {
             <div className="section-heading">
               <div>
                 <span className="eyebrow">FROM “WHAT IF” TO “I MADE THIS”</span>
-                <h2>A little guidance goes a long way.</h2>
+                <h2>Your first app, one lesson at a time.</h2>
               </div>
               <p>
-                We’re your coach, not another coding tool.
+                A course beside your coding tool.
                 <br />
                 You bring the idea. We help you find the next step.
               </p>
@@ -663,20 +629,9 @@ export default function App() {
                 )}
               </Button>
             </div>
-            {step === 4 && error && (
-              <button
-                className="text-button fallback-button"
-                onClick={starterScope}
-              >
-                Use starter guidance instead <ArrowRight size={15} />
-              </button>
-            )}
             <p className="privacy-note">
               <ShieldCheck size={14} />
-              {aiAvailable
-                ? "Your answers are sent to our AI coach to personalize your plan."
-                : "Starter guidance works without an AI connection."}{" "}
-              Progress stays in this browser.
+              Your plan and course progress stay in this browser.
             </p>
           </section>
         </main>
@@ -705,7 +660,7 @@ export default function App() {
                 <span className="pill">
                   <Sprout size={14} /> Your first version
                 </span>
-                <ModeTag mode={scopeMode} />
+                <CourseTag />
               </div>
               <label className="field-label" htmlFor="scope-title">
                 Project name
@@ -798,9 +753,7 @@ export default function App() {
                 />
               </section>
               <p className="small-muted">
-                {scopeMode === "ai"
-                  ? "This is an AI suggestion. You decide what belongs in your project."
-                  : "This is starter guidance based on your answers. Edit it to fit your idea."}
+                Your answers shape this course plan. Edit it to fit your idea.
               </p>
             </aside>
           </div>
@@ -915,8 +868,8 @@ export default function App() {
                       <span className="heading-dot">.</span>
                     </h1>
                     <p>
-                      Five small chapters. One real app. And a little guidance
-                      along the way.
+                      Five practical chapters to help you build, test, and share
+                      your first app.
                     </p>
                   </div>
                   <div className="heading-sketch" aria-hidden="true">
@@ -1048,17 +1001,20 @@ export default function App() {
                       <div className="coach-avatar">
                         <Sparkles size={21} />
                       </div>
-                      <span className="eyebrow">A NOTE FROM YOUR COACH</span>
+                      <span className="eyebrow">
+                        A NOTE FROM YOUR COURSE GUIDE
+                      </span>
                       <h3>You don’t need to know everything to begin.</h3>
                       <p>
                         Just take the next small step. We’ll help you ask the
                         right questions and check what happens.
                       </p>
                       <div className="coach-signature">
-                        You’ve got this.<span>— Your FirstShip coach</span>
+                        You’ve got this.
+                        <span>— Your FirstShip course guide</span>
                       </div>
                     </section>
-                    <ModeDisclosure aiAvailable={aiAvailable} />
+                    <CourseNote />
                   </aside>
                 </div>
               </>
@@ -1181,7 +1137,7 @@ export default function App() {
                         Open Codex <ExternalLink size={14} />
                       </a>
                     </section>
-                    <ModeDisclosure aiAvailable={aiAvailable} />
+                    <CourseNote />
                   </aside>
                 </div>
               </>
@@ -1376,7 +1332,7 @@ export default function App() {
                         items={[
                           "Try the main action from start to finish.",
                           "Check an empty or unexpected input.",
-                          "Keep passwords and private data out of your demo.",
+                          "Keep passwords and private data out of your walkthrough.",
                           "Explain what works and what’s still on your later list.",
                         ]}
                       />
@@ -1661,24 +1617,20 @@ function CheckList({ items }) {
     </ul>
   );
 }
-function ModeTag({ mode }) {
+function CourseTag() {
   return (
-    <span className="mode-tag">
-      <span className={mode === "ai" ? "live-dot" : ""} />
-      {mode === "ai" ? "AI-personalized" : "Starter guidance"}
+    <span className="course-tag">
+      <span /> Guided course
     </span>
   );
 }
-function ModeDisclosure({ aiAvailable }) {
+function CourseNote() {
   return (
-    <div className="mode-disclosure">
+    <div className="course-note">
       <ShieldCheck size={16} />
       <p>
-        {aiAvailable
-          ? "AI coaching is available. Only what you submit for planning or help is sent to the AI provider."
-          : ONLINE_DEMO
-            ? "Starter guidance runs in your browser. Your plan and troubleshooting notes stay on this device."
-            : "Starter guidance is active. Live AI coaching needs a server connection configured by the app owner."}
+        Build with your AI coding tool, then return here to check your work.
+        Your plan and notes stay in this browser.
       </p>
     </div>
   );
@@ -1856,7 +1808,6 @@ function HelpPanel({ task, project, persist, copy, onClose }) {
   const [result, setResult] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [mode, setMode] = useState("guided");
   function update(key, value) {
     const next = { ...problem, [key]: value };
     setProblem(next);
@@ -1870,21 +1821,15 @@ function HelpPanel({ task, project, persist, copy, onClose }) {
     setBusy(true);
     setError("");
     try {
-      const d = await coach({
-        action: "help",
+      const guidance = createTroubleshootingGuidance({
         profile: project.profile,
         scope: project.scope,
         task: { id: task.id, title: task.title },
         problem,
       });
-      setResult(d.result);
-      setMode(d.mode);
+      setResult(guidance);
     } catch (err) {
-      setError(
-        err.name === "TimeoutError"
-          ? "The coach took too long. Your notes are still here; try again."
-          : err.message,
-      );
+      setError(err.message);
     } finally {
       setBusy(false);
     }
@@ -1976,7 +1921,7 @@ function HelpPanel({ task, project, persist, copy, onClose }) {
         </form>
       ) : (
         <div className="help-result">
-          <ModeTag mode={mode} />
+          <CourseTag />
           <h3>Here’s a place to start.</h3>
           <p>{result.explanation}</p>
           <div className="next-step">
@@ -2047,7 +1992,7 @@ function FinalLinkEditor({ project, persist }) {
   return (
     <>
       <label className="field-label" htmlFor="app-url">
-        Your app or demo link <span>(optional)</span>
+        Your app or walkthrough link <span>(optional)</span>
       </label>
       <input
         id="app-url"

@@ -1115,7 +1115,7 @@ ul {
   justify-content: space-between;
   gap: 10px;
 }
-.mode-tag {
+.course-tag {
   font-size: 9px;
   display: inline-flex;
   align-items: center;
@@ -1123,15 +1123,13 @@ ul {
   color: #91a07f;
   white-space: nowrap;
 }
-.mode-tag > span {
+.course-tag > span {
   width: 5px;
   height: 5px;
   border-radius: 50%;
   background: #a1af91;
 }
-.mode-tag .live-dot {
-  background: #71964c;
-}
+
 .scope-name {
   font-family: Manrope, sans-serif;
   font-size: 21px;
@@ -1799,7 +1797,7 @@ ul {
   color: #a3b092;
   margin-top: 5px;
 }
-.mode-disclosure {
+.course-note {
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -1808,7 +1806,7 @@ ul {
   padding: 2px 3px;
   line-height: 1.7;
 }
-.mode-disclosure svg {
+.course-note svg {
   margin-top: 2px;
   color: #a7b39b;
 }
@@ -2809,7 +2807,7 @@ ul {
   .dashboard-aside > .coach-card {
     grid-column: 1/-1;
   }
-  .dashboard-aside > .mode-disclosure {
+  .dashboard-aside > .course-note {
     grid-column: 1/-1;
   }
   .coach-card {
@@ -3205,7 +3203,7 @@ ul {
   .scope-footer > .button {
     width: 100%;
   }
-  .mode-tag {
+  .course-tag {
     font-size: 8px;
   }
   .scope-side > .small-muted {
@@ -3414,7 +3412,7 @@ ul {
     margin-top: 27px;
   }
   .dashboard-aside > .coach-card,
-  .dashboard-aside > .mode-disclosure {
+  .dashboard-aside > .course-note {
     grid-column: auto;
   }
   .project-card {
@@ -3461,7 +3459,7 @@ ul {
   .coach-card .eyebrow {
     font-size: 8px;
   }
-  .mode-disclosure {
+  .course-note {
     font-size: 9px;
     line-height: 1.8;
   }
@@ -3756,7 +3754,7 @@ ul {
 .progress-note,
 .coach-card > p,
 .coach-signature span,
-.mode-disclosure,
+.course-note,
 .workspace-footer,
 .lesson-heading > p,
 .task-learn,
@@ -3784,7 +3782,7 @@ ul {
   color: #6f7d64;
 }
 .eyebrow,
-.mode-tag,
+.course-tag,
 .day-eyebrow,
 .step-line,
 .step-number,
@@ -3891,7 +3889,7 @@ ul {
 .task-tabs button {
   font-size: 11px;
 }
-.mode-disclosure {
+.course-note {
   font-size: 10px;
 }
 .progress-card > p,
@@ -4026,7 +4024,7 @@ ul {
 .workspace-reminder h3 {
   color: #607c4d;
 }
-.mode-tag {
+.course-tag {
   font-size: 10px;
 }
 .project-card-bottom .pill {
@@ -4157,7 +4155,7 @@ ul {
 .reflection-field {
   color: #637e4f;
 }
-.mode-disclosure svg {
+.course-note svg {
   color: #789267;
 }
 .check-list svg {
@@ -4269,7 +4267,7 @@ ul {
   .page-heading p {
     font-size: 12px;
   }
-  .mode-disclosure {
+  .course-note {
     font-size: 10px;
   }
   .task-tabs button {
@@ -4366,43 +4364,5 @@ ul {
   .help-result > p,
   .next-step p {
     font-size: 12px;
-  }
-}
-
-.online-demo-note {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 12px 24px;
-  background: #eaf1e2;
-  border-bottom: 1px solid #d7e2cc;
-  color: #365b40;
-  font-size: 12px;
-  line-height: 1.7;
-}
-.online-demo-note svg {
-  flex-shrink: 0;
-}
-.online-demo-note a {
-  white-space: nowrap;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-@media (max-width: 600px) {
-  .online-demo-note {
-    align-items: flex-start;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    padding: 12px 20px;
-    gap: 7px;
-    font-size: 11px;
-  }
-  .online-demo-note span {
-    flex: 1;
-    min-width: 220px;
-  }
-  .online-demo-note a {
-    margin-left: 24px;
   }
 }

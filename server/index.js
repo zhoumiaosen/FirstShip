@@ -2,14 +2,7 @@ import http from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { coach, CoachError, makeRateLimiter } from "./coach.js";
 
-try {
-  process.loadEnvFile();
-} catch (error) {
-  if (error.code !== "ENOENT")
-    console.warn("The .env file could not be loaded; check its format.");
-}
 const root = fileURLToPath(new URL("..", import.meta.url));
 const mime = {
   ".html": "text/html; charset=utf-8",
@@ -30,9 +23,6 @@ const send = (res, status, data) => {
 
 export async function createAppServer(options = {}) {
   const dev = options.dev ?? false;
-  const apiKey = options.apiKey ?? process.env.OPENAI_API_KEY ?? "";
-  const allow = makeRateLimiter();
-  let active = 0;
   let vite = null;
   const server = http.createServer(async (req, res) => {
     res.setHeader("X-Content-Type-Options", "nosniff");
@@ -50,63 +40,6 @@ export async function createAppServer(options = {}) {
       );
     } catch {
       return send(res, 400, { error: "Invalid request path." });
-    }
-    if (pathname === "/api/health" && req.method === "GET")
-      return send(res, 200, { ok: true, aiAvailable: !!apiKey });
-    if (pathname === "/api/coach") {
-      if (req.method !== "POST") {
-        res.setHeader("Allow", "POST");
-        return send(res, 405, { error: "Use POST for coaching." });
-      }
-      if (
-        req.headers.origin &&
-        ![`http://${host}`, `https://${host}`].includes(req.headers.origin)
-      )
-        return send(res, 403, {
-          error: "Coaching requests must come from this app.",
-        });
-      if (!req.headers["content-type"]?.startsWith("application/json"))
-        return send(res, 415, { error: "Use JSON for coaching requests." });
-      if (!allow(req.socket.remoteAddress || "local"))
-        return send(res, 429, {
-          error: "Please pause a moment before asking the coach again.",
-        });
-      if (active >= 4)
-        return send(res, 429, {
-          error: "The coach is busy. Please retry in a moment.",
-        });
-      let bytes = 0;
-      const chunks = [];
-      try {
-        for await (const chunk of req) {
-          bytes += chunk.length;
-          if (bytes > 24576)
-            throw new CoachError(
-              "This request is too large. Shorten the pasted text.",
-              413,
-            );
-          chunks.push(chunk);
-        }
-        let body;
-        try {
-          body = JSON.parse(Buffer.concat(chunks).toString());
-        } catch {
-          throw new CoachError("This request could not be read. Please retry.");
-        }
-        active++;
-        try {
-          return send(res, 200, await coach(body, { apiKey }));
-        } finally {
-          active--;
-        }
-      } catch (error) {
-        return send(res, error instanceof CoachError ? error.status : 500, {
-          error:
-            error instanceof CoachError
-              ? error.message
-              : "Something went wrong. Your work is safe; please retry.",
-        });
-      }
     }
     const optimizedModule =
       dev &&

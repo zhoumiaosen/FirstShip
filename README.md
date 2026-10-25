@@ -2,11 +2,11 @@
 
 **Your idea. Your first app. Five guided days.**
 
-FirstShip coaches beginners as they build their own small browser app with Codex in a separate tool. It turns an ambitious idea into an editable, achievable scope, then provides five days of project-specific tasks, copyable prompts, learner checks, and contextual troubleshooting.
+FirstShip is a complete guided course for beginners building their own small browser app with an external AI coding tool such as Codex. Turn your idea into an editable, achievable scope, then follow ten practical tasks with project-specific prompts, learner checks, reflections, and troubleshooting.
 
 [**Try FirstShip online**](https://zhoumiaosen.github.io/FirstShip/app/) · [Introduction website](https://zhoumiaosen.github.io/FirstShip/) · [Run locally](#run-locally) · [Screenshots](#screenshots)
 
-The public app includes the complete learner journey with **Starter guidance**: idea scoping, ten tasks, contextual troubleshooting, learner-confirmed checks, saved progress, and summary exports. No installation, account, or AI API key is needed. Building your own app still happens in a separate coding tool such as Codex; access to that tool is separate. Live AI is optional in the local server version and is not active in the public app.
+Open the course in your browser with no installation or account. All five days are available immediately; five days is a suggested pace. Building your own app happens in a separate coding tool, whose access and setup requirements are separate.
 
 ![FirstShip dashboard showing a personalized five-day learning journey for the sample LeafLog project](docs/screenshots/dashboard.png)
 
@@ -15,12 +15,12 @@ The public app includes the complete learner journey with **Starter guidance**: 
 - Bring your own idea and turn it into an editable, achievable first version.
 - Follow ten practical tasks across five guided days, with prompts to take to Codex.
 - Check the result yourself, record what happened, and keep your progress across visits.
-- Get a focused next step when you are stuck, then return to building.
+- Turn an error report into a focused investigation prompt for your coding tool.
 - Download a summary of your plan, completed tasks, and reflections.
 
 ## Screenshots
 
-These are real app captures using **LeafLog**, an illustrative plant-watering project. They show starter guidance; no learner data or live AI conversation is included.
+These are real course captures using **LeafLog**, an illustrative plant-watering project. They show project-specific lessons and troubleshooting with sample data.
 
 <details>
 <summary><strong>Turn your own idea into a small, editable plan</strong></summary>
@@ -66,7 +66,7 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:5173. All days are available immediately; five days is a suggested pace.
+Open http://localhost:5173. The local version provides the same browser-based course as the online version.
 
 Production preview:
 
@@ -75,15 +75,15 @@ npm run build
 npm start
 ```
 
-The Node server binds to loopback and accepts localhost hosts only. The public GitHub Pages app is a separate, browser-only build using starter guidance; it does not expose this server or a paid API key. Hosting the Node server publicly with live AI would require an authenticated access boundary and deployment configuration.
+The read-only Node preview server binds to loopback and accepts localhost hosts only. Course planning, lessons, troubleshooting, and progress run in the browser; the server serves the app files.
 
-## Optional live AI
+## How the course works
 
-Without a key, every core flow works using **Starter guidance**, a deterministic scope suggestion and troubleshooting prompt builder. This is explicitly labeled in the app; it is not a live AI diagnosis.
+FirstShip combines a structured curriculum with your own project details. The scoping exercise suggests a smaller version of your idea with one main workflow, a few supporting features, observable success checks, and a later list. You edit and approve that plan.
 
-For live personalized scoping and troubleshooting, copy `.env.example` to `.env` and set `OPENAI_API_KEY` locally. `OPENAI_MODEL` defaults to `gpt-4.1-mini`; select a model available to your API account that supports the Responses API and structured outputs. Restart the server afterward. ChatGPT/Codex access does not supply an API key to this app.
+Each lesson explains a useful practice, gives you a task-specific prompt to take to your coding tool, describes the expected result, and asks you to try concrete checks. The troubleshooting exercise organizes what you tried, expected, and observed into a focused investigation prompt. Coding and AI conversations happen separately in Codex or your chosen tool.
 
-The key stays on the Node server. It is never sent to the browser or included in Git. Do not use a `VITE_` variable for secrets. Live AI uses the [OpenAI Responses API](https://developers.openai.com/api/docs/guides/structured-outputs), sets `store: false`, validates returned data, and reports errors explicitly. A real provider call requires your own API access and may incur charges.
+Milestones are learner-confirmed. FirstShip does not inspect your local code, run your app, diagnose it automatically, or grade your work. Finishing in five days depends on your scope, setup, and available time; lessons stay open at your own pace.
 
 ## Learner journey
 
@@ -92,15 +92,13 @@ The key stays on the Node server. It is never sent to the browser or included in
 3. Follow project-specific task cards in any day; copy prompts into Codex.
 4. Return, try each check, and record what happened.
 5. Use “I'm stuck” to turn an error into a focused investigation prompt.
-6. Complete the core tasks, add a safe app/demo link, and export your project summary.
-
-Milestones are learner-confirmed. FirstShip does not inspect your local code, run your app, or automatically grade your work.
+6. Complete the core tasks, add a safe app or walkthrough link, and export your project summary.
 
 ## Data and privacy
 
 One project is saved in this browser's local storage, including idea, plan, reflections, and lesson progress. It is not synced between devices. Export a summary before clearing browser data. Storage failures are shown rather than reported as saved.
 
-In the public app, starter scoping and troubleshooting run in the browser without sending your answers to an AI provider. In the local server version, scoping and help submissions go to the local server; when live AI is enabled, those submitted fields are sent to OpenAI. Remove passwords, API keys, personal data, and private code before submitting to an AI service or coding tool. Do not use sensitive or regulated information in this prototype.
+Planning and troubleshooting guidance run in your browser. FirstShip does not send your course answers to an AI provider. Anything you separately paste into Codex or another coding tool is handled by that tool. Remove passwords, secrets, personal information, and private code before sharing with any external service.
 
 ## Verification
 
@@ -109,23 +107,23 @@ npm test
 npm run build
 npx playwright install chromium
 npm run test:e2e
-npm run build:demo
-npm run test:demo
+npm run build:site
+npm run test:site
 ```
 
-Node tests cover scope variety, completion gates, persistence, URL handling, AI response validation, failures, request limits, and server boundaries. Browser tests cover the learner journey and small-screen navigation. The public-demo test opens the introduction link, completes all ten tasks, uses help, reloads, exports, and verifies that no backend requests are made. GitHub Actions runs both versions.
+Node tests cover scope variety, completion gates, persistence, URL handling, troubleshooting guidance, and preview-server boundaries. Browser tests cover the learner journey and small-screen navigation. The published-course test follows the introduction link, completes all ten tasks, uses troubleshooting, reloads, exports, and verifies that the course works without backend requests. GitHub Actions runs the relevant checks.
 
-## Online app, introduction website, and screenshots
+## Online course, introduction website, and screenshots
 
-The introduction site lives in `docs/index.html` with its own stylesheet. It is a standalone static website: no build step, account, API key, or JavaScript is needed to view it. Its **Try FirstShip** links open the working browser app at `docs/app/`. GitHub Pages publishes the repository's `main` branch from `/docs`.
+The introduction site lives in `docs/index.html` with its own stylesheet. It is a standalone static website with no build step or JavaScript. Its **Try FirstShip** links open the complete browser course at `docs/app/`. GitHub Pages publishes the repository's `main` branch from `/docs`.
 
-Rebuild the public app after application changes:
+Rebuild the published course after application changes:
 
 ```sh
-npm run build:demo
+npm run build:site
 ```
 
-This creates the browser-only app in `docs/app/`, using local starter guidance and browser-local progress. It includes no server or live AI credentials. Commit the generated files when publishing an update.
+This creates the browser course in `docs/app/`, including planning, lessons, troubleshooting, browser-local progress, and exports. Commit the generated files when publishing an update.
 
 Preview the website locally:
 
@@ -133,7 +131,7 @@ Preview the website locally:
 python3 -m http.server 4173 --directory docs
 ```
 
-Then open http://localhost:4173 for the introduction page, or http://localhost:4173/app/ to try the browser app. Rebuild with `npm run build:demo` first if `docs/app/` is missing or out of date. The optional local server setup above enables live AI with your own key.
+Then open http://localhost:4173 for the introduction page, or http://localhost:4173/app/ for the course. Run `npm run build:site` first if `docs/app/` is missing or out of date.
 
 To refresh the screenshots, start FirstShip in one terminal, then run this in another:
 
@@ -141,26 +139,34 @@ To refresh the screenshots, start FirstShip in one terminal, then run this in an
 npm run screenshots
 ```
 
-The capture script opens an isolated sample project and uses the actual starter-guidance code. It does not change your saved project or call a paid AI provider. `SCREENSHOT_BASE_URL` can point to a different local preview address.
+The capture script opens an isolated sample project. It does not change your saved project. `SCREENSHOT_BASE_URL` can point to a different local preview address.
 
 ## Source map
 
 - `src/App.jsx`: welcome, onboarding, plan, journey, lessons, help, and summary.
 - `src/styles.css`: responsive visual system.
-- `src/lib/domain.js`: personalized curriculum, scope, completion, and export.
+- `src/lib/domain.js`: project-specific curriculum, scope, completion, and export.
 - `src/lib/storage.js`: browser-local persistence and recovery.
-- `src/lib/guidance.js`: shared starter guidance used without a live AI provider.
-- `src/lib/coach-client.js`: coaching access for the online demo and local server modes.
-- `server/coach.js`: input validation, starter guidance, optional live AI.
-- `server/index.js`: local HTTP server and API boundaries.
+- `src/lib/guidance.js`: browser-local troubleshooting guidance and error-report prompts.
+- `server/index.js`: read-only local development and production preview server.
 - `devpost/`: scope, product requirements, technical specification, build checklist.
 - `docs/index.html`, `docs/site.css`: static introduction website.
 - `docs/screenshots/`: real sample-project screenshots used by the website and README.
-- `docs/app/`: generated, browser-only public app (`npm run build:demo`).
+- `docs/app/`: generated, published browser course (`npm run build:site`).
+- `tests/published-course.spec.js`, `playwright.site.config.js`: published-course browser verification.
 - `scripts/capture-screenshots.mjs`: reproducible, isolated screenshot capture.
+
+## Hackathon planning documents
+
+The required planning documents are included in this public repository:
+
+- [Project scope](devpost/scope.md)
+- [Product requirements](devpost/prd.md)
+- [Technical specification](devpost/spec.md)
+- [Build checklist](devpost/checklist.md)
 
 ## Hackathon workflow and attribution
 
 Built from a new empty project folder during the hackathon, using the [Devpost Learn Skill Pack](https://github.com/challengepost/learn-ai-basics). Its six installed skills live under `.agents/skills/` and are MIT licensed; see `.agents/skills/DEVPOST-LICENSE`. Planning documents distill decisions made with the learner before implementation. Builder-selected technical defaults are labeled in the specification. Original curriculum material in the app is informed by the linked official guides in the app's resources.
 
-Dependencies include React, Vite, and Lucide icons. No pre-existing application code was imported. AI coding assistants were used for implementation and verification. A public source repository and a separately recorded, publicly accessible demo video are required for submission; this repository does not constitute a completed hackathon submission.
+Dependencies include React, Vite, and Lucide icons. No pre-existing application code was imported. AI coding assistants were used for implementation and verification. A public source repository and a separately recorded, publicly accessible demonstration video are required for submission; this repository does not constitute a completed hackathon submission.

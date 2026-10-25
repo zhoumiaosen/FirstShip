@@ -16,8 +16,8 @@ test("public app launches from introduction and completes the journey with no ba
     .getByRole("link", { name: /Try FirstShip/ })
     .click();
   await expect(page).toHaveURL(/\/app\/$/);
-  await expect(page.locator(".online-demo-note")).toContainText(
-    "Starter guidance",
+  await expect(page.locator("body")).not.toContainText(
+    /Online demo|Starter guidance|AI-personalized|Live AI/,
   );
   await page
     .getByRole("button", { name: "Start building", exact: true })
@@ -64,7 +64,7 @@ test("public app launches from introduction and completes the journey with no ba
   await page
     .getByRole("button", { name: "Help me find the next step" })
     .click();
-  await expect(page.locator(".help-result")).toContainText("Starter guidance");
+  await expect(page.locator(".help-result")).toContainText("Guided course");
   await expect(page.locator(".help-result .prompt-box")).toContainText(
     "The history stays empty",
   );
@@ -81,7 +81,7 @@ test("public app launches from introduction and completes the journey with no ba
         await box.check();
       await card
         .locator("textarea")
-        .fill(`Observed day ${day} task ${task} in the online demo.`);
+        .fill(`Observed day ${day} task ${task} in the guided course.`);
       await card.getByRole("button", { name: "I checked it—continue" }).click();
     }
   }

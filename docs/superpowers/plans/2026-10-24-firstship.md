@@ -1,3 +1,5 @@
+> Historical implementation plan. Superseded by the course-only architecture in `devpost/spec.md`; optional integration was removed at the user’s request.
+
 # FirstShip Implementation Plan
 
 > **For agentic workers:** Execute focused tasks with independent domain and UI ownership, then review the integrated app.

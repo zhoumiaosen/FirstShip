@@ -53,7 +53,6 @@ export function isValidProject(p) {
     return false;
   if (p.appUrl && safeUrl(p.appUrl) === "") return false;
   if (
-    !["guided", "ai"].includes(p.mode) ||
     !isObject(p.reflections) ||
     !Object.values(p.reflections).every((x) => string(x))
   )
@@ -125,7 +124,9 @@ export function loadProject(storage) {
     const envelope = JSON.parse(saved);
     if (envelope.version !== 1 || !isValidProject(envelope.project))
       throw Error("invalid");
-    return { project: envelope.project, warning: "" };
+    // Older saved projects included a delivery-mode flag; retain all course progress.
+    const { mode: legacyMode, ...project } = envelope.project;
+    return { project, warning: "" };
   } catch {
     return {
       project: null,

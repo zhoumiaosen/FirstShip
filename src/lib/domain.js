@@ -134,7 +134,7 @@ export function createGuidedScope(profile = {}) {
   };
 }
 
-export function createProject(profile, scope, mode = "guided") {
+export function createProject(profile, scope) {
   return {
     id: globalThis.crypto?.randomUUID?.() ?? `project-${Date.now()}`,
     profile: {
@@ -145,7 +145,6 @@ export function createProject(profile, scope, mode = "guided") {
       time: text(profile.time, 100),
     },
     scope,
-    mode: mode === "ai" ? "ai" : "guided",
     approved: false,
     completed: {},
     drafts: {},
@@ -303,7 +302,7 @@ export function getDays(project) {
         2,
         "Show what you built",
         "You have a first version when you can show its main task working and explain who it helps. Sharing is optional; showing it running locally counts.",
-        `Help me prepare a 60-second walkthrough of ${title}: who it helps, the problem, the main workflow (${core}), and an honest limitation. Have me demonstrate it rather than claiming you verified what I did. Help me keep the app running for my demo. Leave new features on my later list.`,
+        `Help me prepare a 60-second walkthrough of ${title}: who it helps, the problem, the main workflow (${core}), and an honest limitation. Have me demonstrate it rather than claiming you verified what I did. Help me keep the app running for my walkthrough. Leave new features on my later list.`,
         "A short walkthrough of your working first app and a clear next step.",
         [
           "I demonstrated my main workflow from start to finish.",
@@ -384,7 +383,7 @@ export function exportSummary(project) {
   const progress = getProgress(project),
     s = project.scope,
     url = safeUrl(project.appUrl);
-  return `# ${s.title} — My FirstShip journey\n\nStatus: ${progress.completed === progress.total ? "Completed" : "In progress"} (${progress.completed}/${progress.total} tasks)\n\nProgress and checks are learner-confirmed; FirstShip has not inspected the app.\n\n## My idea\n${project.profile.idea}\n\n## First version\n${s.description}\n\nAudience: ${s.audience}\n\nCore workflow: ${s.coreTask}\n\n## Build now\n${s.features.map((x) => `- ${x}`).join("\n")}\n\n## Definition of done\n${s.done.map((x) => `- ${x}`).join("\n")}\n\n${url ? `App or demo: ${url}\n\n` : ""}## My practice\n${getDays(
+  return `# ${s.title} — My FirstShip journey\n\nStatus: ${progress.completed === progress.total ? "Completed" : "In progress"} (${progress.completed}/${progress.total} tasks)\n\nProgress and checks are learner-confirmed; FirstShip has not inspected the app.\n\n## My idea\n${project.profile.idea}\n\n## First version\n${s.description}\n\nAudience: ${s.audience}\n\nCore workflow: ${s.coreTask}\n\n## Build now\n${s.features.map((x) => `- ${x}`).join("\n")}\n\n## Definition of done\n${s.done.map((x) => `- ${x}`).join("\n")}\n\n${url ? `App or walkthrough: ${url}\n\n` : ""}## My practice\n${getDays(
     project,
   )
     .map(
