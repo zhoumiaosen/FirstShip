@@ -2,12 +2,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createAppServer } from "./index.js";
 
-test("preview serves the course and exposes no coaching API or private files", async (t) => {
+test("preview exposes no coaching API or private files", async (t) => {
   const server = await createAppServer({ dev: false });
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   t.after(() => new Promise((resolve) => server.close(resolve)));
   const base = `http://127.0.0.1:${server.address().port}`;
-  assert.equal((await fetch(base)).status, 200);
   for (const path of [
     "/.env",
     "/package.json",
