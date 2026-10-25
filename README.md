@@ -4,6 +4,57 @@
 
 FirstShip coaches beginners as they build their own small browser app with Codex in a separate tool. It turns an ambitious idea into an editable, achievable scope, then provides five days of project-specific tasks, copyable prompts, learner checks, and contextual troubleshooting.
 
+[Explore the introduction website](https://zhoumiaosen.github.io/FirstShip/) · [Quick start](#run-locally) · [Screenshots](#screenshots)
+
+![FirstShip dashboard showing a personalized five-day learning journey for the sample LeafLog project](docs/screenshots/dashboard.png)
+
+## What you can do
+
+- Bring your own idea and turn it into an editable, achievable first version.
+- Follow ten practical tasks across five guided days, with prompts to take to Codex.
+- Check the result yourself, record what happened, and keep your progress across visits.
+- Get a focused next step when you are stuck, then return to building.
+- Download a summary of your plan, completed tasks, and reflections.
+
+## Screenshots
+
+These are real app captures using **LeafLog**, an illustrative plant-watering project. They show starter guidance; no learner data or live AI conversation is included.
+
+<details>
+<summary><strong>Turn your own idea into a small, editable plan</strong></summary>
+
+![Editable LeafLog scope with one core workflow, build-now features, and a later list](docs/screenshots/scope.png)
+
+</details>
+
+<details>
+<summary><strong>Learn with a task, a prompt, and a clear check</strong></summary>
+
+![FirstShip day-three lesson with a personalized Codex prompt and expected result](docs/screenshots/lesson.png)
+
+</details>
+
+<details>
+<summary><strong>Find your next step when something goes wrong</strong></summary>
+
+![FirstShip coaching panel turning a sample watering-history problem into an investigation prompt](docs/screenshots/coaching.png)
+
+</details>
+
+<details>
+<summary><strong>A learning space that works on a small screen</strong></summary>
+
+<img src="docs/screenshots/mobile.png" alt="FirstShip lesson on a mobile screen with accessible day navigation and a personalized prompt" width="390" />
+
+</details>
+
+<details>
+<summary><strong>A welcoming starting point for first-time builders</strong></summary>
+
+![FirstShip welcome page introducing the five-day guided experience](docs/screenshots/welcome.png)
+
+</details>
+
 ## Run locally
 
 Requires Node.js 22.12+ (Node 24 recommended) and npm.
@@ -60,6 +111,26 @@ npm run test:e2e
 
 Node tests cover scope variety, completion gates, persistence, URL handling, AI response validation, failures, request limits, and server boundaries. Browser tests cover the learner journey and small-screen navigation. GitHub Actions runs the same checks.
 
+## Introduction website and screenshots
+
+The introduction site lives in `docs/index.html` with its own stylesheet. It is a standalone static website: no build step, account, API key, or JavaScript is needed to view it. GitHub Pages publishes the repository's `main` branch from `/docs`.
+
+Preview the website locally:
+
+```sh
+python3 -m http.server 4173 --directory docs
+```
+
+Then open http://localhost:4173. The introduction page explains the app; follow the quick start above to run the working coach locally.
+
+To refresh the screenshots, start FirstShip in one terminal, then run this in another:
+
+```sh
+npm run screenshots
+```
+
+The capture script opens an isolated sample project and uses the actual starter-guidance code. It does not change your saved project or call a paid AI provider. `SCREENSHOT_BASE_URL` can point to a different local preview address.
+
 ## Source map
 
 - `src/App.jsx`: welcome, onboarding, plan, journey, lessons, help, and summary.
@@ -69,6 +140,9 @@ Node tests cover scope variety, completion gates, persistence, URL handling, AI 
 - `server/coach.js`: input validation, starter guidance, optional live AI.
 - `server/index.js`: local HTTP server and API boundaries.
 - `devpost/`: scope, product requirements, technical specification, build checklist.
+- `docs/index.html`, `docs/site.css`: static introduction website.
+- `docs/screenshots/`: real sample-project screenshots used by the website and README.
+- `scripts/capture-screenshots.mjs`: reproducible, isolated screenshot capture.
 
 ## Hackathon workflow and attribution
 
