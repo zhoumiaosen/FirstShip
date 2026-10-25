@@ -30,9 +30,9 @@ Files: src/App.jsx, src/lib/domain.js, server/coach.js, server/index.js, server/
 Files: tests/journey.spec.js, README.md, LICENSE, .github/workflows/check.yml.
 - [x] Verify return visits, day navigation, help errors, mobile layout, no secrets and clean production build.
 - [x] Fresh-agent review; fix important findings with regression tests.
-- [ ] Commit; create public GitHub repository and push after browser authorization completes.
+- [x] Committed and pushed main to https://github.com/zhoumiaosen/FirstShip.
 
 ## Implementation notes
 - Independent read-only review found one P2: partial restored help drafts could crash. Reproduced in browser and fixed by merging default fields.
 - Preview rule adjusted to allow only Vite generated dependency modules while continuing to reject dotfiles. HMR shares the HTTP server to avoid port conflicts.
-- User authorized GitHub publication; browser sign-in pending.
+- User authorized GitHub publication; GitHub sign-in completed and main pushed.

@@ -17,3 +17,6 @@ Bad input: 400. Oversized body: 413. Provider timeout: 504; provider invalid/una
 npm install; npm run dev → http://localhost:5173. Production: npm run build && npm start. Optional .env server key, never VITE_ secrets. Local demo is sufficient for hackathon recording. GitHub publication explicitly authorized.
 ## Verification
 Node tests: scoping variety, completion gates, malformed storage, summary links, provider schema/error/rate handling. Browser tests: complete onboarding, edit scope, tasks/checks/reflection, help, reload, responsive navigation, export. Build and inspect browser screenshots.
+
+## Public Repository
+https://github.com/zhoumiaosen/FirstShip — public, main branch. GitHub Actions runs core tests, production build and browser checks on push.
