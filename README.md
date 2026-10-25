@@ -6,6 +6,8 @@ FirstShip is a complete guided course for beginners building their own small bro
 
 [**Try FirstShip online**](https://zhoumiaosen.github.io/FirstShip/app/) · [Introduction website](https://zhoumiaosen.github.io/FirstShip/) · [Run locally](#run-locally) · [Screenshots](#screenshots)
 
+[**Watch the English walkthrough (1:35)**](https://youtu.be/MfOfE2HAp48) · [Devpost submission](https://devpost.com/software/firstship)
+
 Open the course in your browser with no installation or account. All five days are available immediately; five days is a suggested pace. Building your own app happens in a separate coding tool, whose access and setup requirements are separate.
 
 ![FirstShip dashboard showing a personalized five-day learning journey for the sample LeafLog project](docs/screenshots/dashboard.png)
@@ -169,4 +171,4 @@ The required planning documents are included in this public repository:
 
 Built from a new empty project folder during the hackathon, using the [Devpost Learn Skill Pack](https://github.com/challengepost/learn-ai-basics). Its six installed skills live under `.agents/skills/` and are MIT licensed; see `.agents/skills/DEVPOST-LICENSE`. Planning documents distill decisions made with the learner before implementation. Builder-selected technical defaults are labeled in the specification. Original curriculum material in the app is informed by the linked official guides in the app's resources.
 
-Dependencies include React, Vite, and Lucide icons. No pre-existing application code was imported. AI coding assistants were used for implementation and verification. A public source repository and a separately recorded, publicly accessible demonstration video are required for submission; this repository does not constitute a completed hackathon submission.
+Dependencies include React, Vite, and Lucide icons. No pre-existing application code was imported. AI coding assistants were used for implementation and verification. FirstShip has been submitted to Build With AI: Basics; the Devpost project page and English walkthrough are linked above.
